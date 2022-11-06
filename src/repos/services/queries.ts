@@ -17,6 +17,7 @@ export const GET_REPOSITORIES = gql`
         endCursor
         startCursor
       }
+      repositoryCount
     }
   }
 `;

@@ -17,5 +17,6 @@ export type ReposList = {
   search: {
     nodes: Repo[];
     pageInfo: Page;
+    repositoryCount: number;
   };
 };

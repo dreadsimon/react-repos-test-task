@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
+import { HeaderStyled } from './StyledComponents';
 
-export const Header: FC = () => {
-  return (
-    <header className="App-header">
-      <h1>React Github Repositories</h1>
-    </header>
-  );
-};
+export const Header: FC = () => (
+  <HeaderStyled>
+    <h1>React Github Repositories</h1>
+  </HeaderStyled>
+);
