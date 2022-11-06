@@ -12,3 +12,8 @@ export const TableRowStyled = styled(TableRow)`
 export const TableHeaderCellStyled = styled(TableCell)`
   font-weight: bold;
 `;
+
+export const VerticalCenter = styled.div`
+  display: flex;
+  align-items: center;
+`;

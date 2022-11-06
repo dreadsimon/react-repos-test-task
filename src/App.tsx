@@ -1,17 +1,14 @@
 import React from 'react';
-import { Container } from '@mui/material';
-import './App.css';
 import { Header } from './shared';
 import { Repos } from './repos';
+import { AppWrapper } from './shared/components/StyledComponents';
 
 function App() {
   return (
-    <div className="App">
-      <Container maxWidth="sm">
-        <Header />
-        <Repos />
-      </Container>
-    </div>
+    <AppWrapper>
+      <Header />
+      <Repos />
+    </AppWrapper>
   );
 }
 

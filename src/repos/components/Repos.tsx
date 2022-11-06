@@ -7,7 +7,7 @@ import {
   DEFAULT_SEARCH_QUERY,
   PUBLIC_REPO_PREFIX
 } from '../services';
-import { Loader } from '../../shared';
+import { Loader, ErrorAlert } from '../../shared';
 import { List } from './List';
 import { ReposList, PaginationQuery, UpdateParams, SearchQuery } from '../models';
 import Search from './Search';
@@ -17,7 +17,7 @@ export const Repos: FC = () => {
   const [shouldResetPage, setShouldResetPage] = useState(false);
   const [searchphrase, setSearchphrase] = useState(DEFAULT_SEARCH_QUERY);
 
-  const { loading, data, fetchMore } = useQuery(GET_REPOSITORIES, {
+  const { loading, data, error, fetchMore } = useQuery(GET_REPOSITORIES, {
     variables: { ...DEFAULT_GET_REPOSITORIES_VARIABLES }
   });
 
@@ -56,6 +56,9 @@ export const Repos: FC = () => {
     handleUpdate(paginationQuery);
   };
 
+  if (error) {
+    return <ErrorAlert error={error} />;
+  }
   return (
     <Box>
       <Loader isLoading={loading || isUpdating} />

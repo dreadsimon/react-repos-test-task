@@ -15,9 +15,16 @@ import ForkRightIcon from '@mui/icons-material/ForkRight';
 import { Repo } from '..';
 import { DEFAULT_ROWS_PER_PAGE } from '../services';
 import { ListProps } from '../models';
-import { ListStyled, TableHeaderCellStyled, TableRowStyled } from './StyledComponents';
+import {
+  ListStyled,
+  TableHeaderCellStyled,
+  TableRowStyled,
+  VerticalCenter
+} from './StyledComponents';
+import { NoResults } from './NoResults';
 
 export const List: FC<ListProps> = ({ data, shouldResetPage, onPaginationChange }) => {
+  const { nodes } = data.search;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
 
@@ -27,22 +34,6 @@ export const List: FC<ListProps> = ({ data, shouldResetPage, onPaginationChange 
       setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
     }
   }, [shouldResetPage]);
-
-  const renderRow = (rowData: Repo) => (
-    <TableRowStyled key={rowData.id}>
-      <TableCell align="left">
-        <Link href={rowData.url} target="_blank" rel="noopener">
-          {rowData.name}
-        </Link>
-      </TableCell>
-      <TableCell align="left">
-        <ForkRightIcon /> {rowData.forkCount}
-      </TableCell>
-      <TableCell align="left">
-        <StarIcon /> {rowData.stargazerCount}
-      </TableCell>
-    </TableRowStyled>
-  );
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     const { startCursor, endCursor } = data.search.pageInfo;
@@ -72,6 +63,30 @@ export const List: FC<ListProps> = ({ data, shouldResetPage, onPaginationChange 
     });
   };
 
+  const renderRow = (rowData: Repo) => (
+    <TableRowStyled key={rowData.id}>
+      <TableCell align="left">
+        <Link href={rowData.url} target="_blank" rel="noopener">
+          {rowData.name}
+        </Link>
+      </TableCell>
+      <TableCell align="left">
+        <VerticalCenter>
+          <ForkRightIcon /> {rowData.forkCount}
+        </VerticalCenter>
+      </TableCell>
+      <TableCell align="left">
+        <VerticalCenter>
+          <StarIcon /> {rowData.stargazerCount}
+        </VerticalCenter>
+      </TableCell>
+    </TableRowStyled>
+  );
+
+  if (!nodes.length) {
+    return <NoResults />;
+  }
+
   return (
     <ListStyled>
       <TableContainer component={Paper}>
@@ -83,7 +98,7 @@ export const List: FC<ListProps> = ({ data, shouldResetPage, onPaginationChange 
               <TableHeaderCellStyled>Stars</TableHeaderCellStyled>
             </TableRow>
           </TableHead>
-          <TableBody>{data.search.nodes.map(renderRow)}</TableBody>
+          <TableBody>{nodes.map(renderRow)}</TableBody>
         </Table>
       </TableContainer>
       <TablePagination
