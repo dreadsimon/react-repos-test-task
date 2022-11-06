@@ -4,7 +4,7 @@ import { ErrorAlertProps } from '../models/ui';
 
 export const ErrorAlert: FC<ErrorAlertProps> = ({ error }) => (
   <Box>
-    <Alert severity="error">
+    <Alert severity="error" data-test-id="error-message">
       {error.name}: {error.message}
     </Alert>
   </Box>

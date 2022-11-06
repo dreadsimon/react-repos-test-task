@@ -35,7 +35,7 @@ export const Search: FC<SearchProps> = ({ onSearchChange }) => {
 
   return (
     <TextField
-      id="search-field"
+      data-testid="search-field"
       label="Search for"
       variant="outlined"
       margin="normal"
@@ -54,5 +54,3 @@ export const Search: FC<SearchProps> = ({ onSearchChange }) => {
     />
   );
 };
-
-export default Search;

@@ -7,10 +7,10 @@ import {
   DEFAULT_SEARCH_QUERY,
   PUBLIC_REPO_PREFIX
 } from '../services';
-import { Loader, ErrorAlert } from '../../shared';
-import { List } from './List';
 import { ReposList, PaginationQuery, UpdateParams, SearchQuery } from '../models';
-import Search from './Search';
+import { Loader, ErrorAlert } from '../../shared';
+import { MemoizedList } from './List';
+import { Search } from './Search';
 
 export const Repos: FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -18,6 +18,8 @@ export const Repos: FC = () => {
   const [searchphrase, setSearchphrase] = useState(DEFAULT_SEARCH_QUERY);
 
   const { loading, data, error, fetchMore } = useQuery(GET_REPOSITORIES, {
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
     variables: { ...DEFAULT_GET_REPOSITORIES_VARIABLES }
   });
 
@@ -64,7 +66,11 @@ export const Repos: FC = () => {
       <Loader isLoading={loading || isUpdating} />
       <Search onSearchChange={handleSearch} />
       {data && (
-        <List data={data} shouldResetPage={shouldResetPage} onPaginationChange={handlePagination} />
+        <MemoizedList
+          data={data}
+          shouldResetPage={shouldResetPage}
+          onPaginationChange={handlePagination}
+        />
       )}
     </Box>
   );

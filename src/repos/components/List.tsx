@@ -23,7 +23,7 @@ import {
 } from './StyledComponents';
 import { NoResults } from './NoResults';
 
-export const List: FC<ListProps> = ({ data, shouldResetPage, onPaginationChange }) => {
+const List: FC<ListProps> = ({ data, shouldResetPage, onPaginationChange }) => {
   const { nodes } = data.search;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
@@ -64,18 +64,18 @@ export const List: FC<ListProps> = ({ data, shouldResetPage, onPaginationChange 
   };
 
   const renderRow = (rowData: Repo) => (
-    <TableRowStyled key={rowData.id}>
-      <TableCell align="left">
+    <TableRowStyled role="row" key={`TableRow-${rowData.id}`}>
+      <TableCell align="left" role="cell" key={`TableCell1-${rowData.id}`}>
         <Link href={rowData.url} target="_blank" rel="noopener">
           {rowData.name}
         </Link>
       </TableCell>
-      <TableCell align="left">
+      <TableCell align="left" role="cell" key={`TableCell2-${rowData.id}`}>
         <VerticalCenter>
           <ForkRightIcon /> {rowData.forkCount}
         </VerticalCenter>
       </TableCell>
-      <TableCell align="left">
+      <TableCell align="left" role="cell" key={`TableCell3-${rowData.id}`}>
         <VerticalCenter>
           <StarIcon /> {rowData.stargazerCount}
         </VerticalCenter>
@@ -90,15 +90,25 @@ export const List: FC<ListProps> = ({ data, shouldResetPage, onPaginationChange 
   return (
     <ListStyled>
       <TableContainer component={Paper}>
-        <Table aria-label="table">
+        <Table
+          aria-label="A table with the repositories list"
+          role="table"
+          aria-rowcount={rowsPerPage}
+        >
           <TableHead>
-            <TableRow>
-              <TableHeaderCellStyled>Repository</TableHeaderCellStyled>
-              <TableHeaderCellStyled>Forked</TableHeaderCellStyled>
-              <TableHeaderCellStyled>Stars</TableHeaderCellStyled>
+            <TableRow key="TableRowHead">
+              <TableHeaderCellStyled role="columnheader" key="HeadCell1">
+                Repository
+              </TableHeaderCellStyled>
+              <TableHeaderCellStyled role="columnheader" key="HeadCell2">
+                Forked
+              </TableHeaderCellStyled>
+              <TableHeaderCellStyled role="columnheader" key="HeadCell3">
+                Stars
+              </TableHeaderCellStyled>
             </TableRow>
           </TableHead>
-          <TableBody>{nodes.map(renderRow)}</TableBody>
+          <TableBody key="TableBodyNodes">{nodes.map(renderRow)}</TableBody>
         </Table>
       </TableContainer>
       <TablePagination
@@ -108,7 +118,12 @@ export const List: FC<ListProps> = ({ data, shouldResetPage, onPaginationChange 
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        role="navigation"
+        data-testid="table-pagination"
+        aria-label="Pagination Navigation"
       />
     </ListStyled>
   );
 };
+
+export const MemoizedList = React.memo(List);

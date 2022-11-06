@@ -5,11 +5,15 @@ import { LoaderProps } from '..';
 export const Loader: FC<LoaderProps> = ({ isLoading }) => (
   <Backdrop
     sx={{
-      color: '#fff',
       zIndex: (theme: Theme) => theme.zIndex.drawer + 1
     }}
     open={isLoading}
   >
-    <CircularProgress color="inherit" />
+    <CircularProgress
+      color="inherit"
+      role="alert"
+      aria-busy="true"
+      data-testid="loading-progress"
+    />
   </Backdrop>
 );
