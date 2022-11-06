@@ -1,19 +1,22 @@
 import React, { FC, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
-import { GET_REPOSITORIES } from '../services/queries';
 import {
+  GET_REPOSITORIES,
   DEFAULT_GET_REPOSITORIES_VARIABLES,
   DEFAULT_SEARCH_QUERY,
   PUBLIC_REPO_PREFIX
-} from '../services/constants';
+} from '../services';
 import { Loader } from '../../shared';
 import { List } from './List';
-import { PaginationQuery, UpdateParams } from '../models/query';
-import { ReposList } from '../models';
+import { ReposList, PaginationQuery, UpdateParams, SearchQuery } from '../models';
+import Search from './Search';
 
 export const Repos: FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [shouldResetPage, setShouldResetPage] = useState(false);
+  const [searchphrase, setSearchphrase] = useState(DEFAULT_SEARCH_QUERY);
+
   const { loading, data, fetchMore } = useQuery(GET_REPOSITORIES, {
     variables: { ...DEFAULT_GET_REPOSITORIES_VARIABLES }
   });
@@ -36,20 +39,30 @@ export const Repos: FC = () => {
       updateQuery,
       variables: {
         ...DEFAULT_GET_REPOSITORIES_VARIABLES,
-        search: `${PUBLIC_REPO_PREFIX} ${DEFAULT_SEARCH_QUERY}`,
+        search: `${PUBLIC_REPO_PREFIX} ${searchphrase}`,
         ...params
       }
     });
   };
 
+  const handleSearch = (searchQuery: SearchQuery) => {
+    setSearchphrase(searchQuery.search);
+    setShouldResetPage(true);
+    handleUpdate(searchQuery);
+  };
+
   const handlePagination = (paginationQuery: PaginationQuery) => {
+    setShouldResetPage(false);
     handleUpdate(paginationQuery);
   };
 
   return (
     <Box>
       <Loader isLoading={loading || isUpdating} />
-      {data && <List data={data} onPaginationChange={handlePagination} />}
+      <Search onSearchChange={handleSearch} />
+      {data && (
+        <List data={data} shouldResetPage={shouldResetPage} onPaginationChange={handlePagination} />
+      )}
     </Box>
   );
 };

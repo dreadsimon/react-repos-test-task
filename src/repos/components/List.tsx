@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   Link,
   Paper,
@@ -13,13 +13,20 @@ import {
 import StarIcon from '@mui/icons-material/Star';
 import ForkRightIcon from '@mui/icons-material/ForkRight';
 import { Repo } from '..';
-import { DEFAULT_ROWS_PER_PAGE } from '../services/constants';
-import { ListProps } from '../models/ui';
+import { DEFAULT_ROWS_PER_PAGE } from '../services';
+import { ListProps } from '../models';
 import { ListStyled, TableHeaderCellStyled, TableRowStyled } from './StyledComponents';
 
-export const List: FC<ListProps> = ({ data, onPaginationChange }) => {
+export const List: FC<ListProps> = ({ data, shouldResetPage, onPaginationChange }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
+
+  useEffect(() => {
+    if (shouldResetPage) {
+      setPage(0);
+      setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
+    }
+  }, [shouldResetPage]);
 
   const renderRow = (rowData: Repo) => (
     <TableRowStyled key={rowData.id}>
