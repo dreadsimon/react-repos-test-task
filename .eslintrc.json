@@ -8,9 +8,8 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "airbnb",
-    "airbnb/hooks",
-    "prettier"
+    "prettier",
+    "plugin:import/recommended"
   ],
   "overrides": [],
   "parser": "@typescript-eslint/parser",
@@ -28,7 +27,12 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "react/react-in-jsx-scope": "off",
+        "camelcase": "error",
+        "spaced-comment": "error",
+        "quotes": ["error", "single"],
+        "no-duplicate-imports": "error"
   },
   "settings": {
     "import/resolver": {
