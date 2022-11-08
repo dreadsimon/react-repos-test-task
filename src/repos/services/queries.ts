@@ -5,6 +5,7 @@ export const GET_REPOSITORIES = gql`
     search(query: $search, type: REPOSITORY, last: $last, before: $before, after: $after) {
       repositoryCount
       nodes {
+        __typename
         ... on Repository {
           id
           name

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Header } from './shared';
+import { AppWrapper, Header } from './shared';
 import { Repos } from './repos';
-import { AppWrapper } from './shared/components/StyledComponents';
 
 function App() {
   return (

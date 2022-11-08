@@ -5,13 +5,13 @@
     "jest": true
   },
   "extends": [
-    "eslint:recommended",
+    "react-app",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "airbnb",
-    "airbnb/hooks",
     "prettier",
-    "plugin:import/recommended"
+    "plugin:import/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "overrides": [],
   "parser": "@typescript-eslint/parser",
@@ -32,7 +32,8 @@
     ],
     "import/prefer-default-export": ["off"],
     "react/function-component-definition": ["off"],
-    "react-hooks/exhaustive-deps": ["warn"]
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"]
   },
   "settings": {
     "import/resolver": {

@@ -5,16 +5,18 @@ import {
   GET_REPOSITORIES,
   DEFAULT_GET_REPOSITORIES_VARIABLES,
   DEFAULT_SEARCH_QUERY,
-  PUBLIC_REPO_PREFIX
+  PUBLIC_REPO_PREFIX,
+  DEFAULT_ROWS_PER_PAGE
 } from '../services';
-import { ReposList, PaginationQuery, UpdateParams, SearchQuery } from '../models';
+import { ReposList, UpdateParams, SearchQuery } from '../models';
 import { Loader, ErrorAlert } from '../../shared';
 import { MemoizedList } from './List';
 import { Search } from './Search';
 
 export const Repos: FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
-  const [shouldResetPage, setShouldResetPage] = useState(false);
+  const [page, setPage] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(DEFAULT_ROWS_PER_PAGE);
   const [searchphrase, setSearchphrase] = useState(DEFAULT_SEARCH_QUERY);
 
   const { loading, data, error, fetchMore } = useQuery(GET_REPOSITORIES, {
@@ -37,7 +39,7 @@ export const Repos: FC = () => {
 
   const handleUpdate = (params: Partial<UpdateParams>) => {
     setIsUpdating(true);
-    return fetchMore({
+    fetchMore({
       updateQuery,
       variables: {
         ...DEFAULT_GET_REPOSITORIES_VARIABLES,
@@ -47,20 +49,43 @@ export const Repos: FC = () => {
     });
   };
 
-  const handleSearch = (searchQuery: SearchQuery) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nonEmptyPhrase = event.target.value || DEFAULT_SEARCH_QUERY;
+    const searchQuery: SearchQuery = {
+      search: `${PUBLIC_REPO_PREFIX}${nonEmptyPhrase}`
+    };
     setSearchphrase(searchQuery.search);
-    setShouldResetPage(true);
+    setPage(0);
     handleUpdate(searchQuery);
   };
 
-  const handlePagination = (paginationQuery: PaginationQuery) => {
-    setShouldResetPage(false);
+  const handlePageChange = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    const { startCursor, endCursor } = data.search.pageInfo;
+    const paginationQuery =
+      newPage > page
+        ? { after: endCursor, last: pageSize }
+        : { before: startCursor, last: pageSize };
     handleUpdate(paginationQuery);
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newRowsPerPage = parseInt(event.target.value, 10);
+    setPageSize(newRowsPerPage);
+    setPage(0);
+    handleUpdate({
+      after: null,
+      before: null,
+      last: newRowsPerPage
+    });
   };
 
   if (error) {
     return <ErrorAlert error={error} />;
   }
+
   return (
     <Box>
       <Loader isLoading={loading || isUpdating} />
@@ -68,8 +93,10 @@ export const Repos: FC = () => {
       {data && (
         <MemoizedList
           data={data}
-          shouldResetPage={shouldResetPage}
-          onPaginationChange={handlePagination}
+          page={page}
+          pageSize={pageSize}
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
         />
       )}
     </Box>

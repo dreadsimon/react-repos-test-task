@@ -1,6 +1,18 @@
-# Getting Started with Create React App
+# React GitHub Repositories
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Features
+
+### UI
+
+1. Displaying 'react' repositories by default
+2. Searching for repository name
+3. Pagination of results
+
+## Setup
+
+1. Create [github personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+2. Pass it to `REACT_APP_GITHUB_API_TOKEN` env variable in `.env` file and don't share it anywhere
+3. Run `npm install` in the project dir
 
 ## Available Scripts
 
@@ -38,6 +50,18 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+### `npm run prepare`
+
+Automatically enables husky after install
+
+### `npm run format`
+
+run Prettier
+
+### `npm run lint`
+
+run eslint
 
 ## Learn More
 

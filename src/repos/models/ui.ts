@@ -1,13 +1,14 @@
-/* eslint-disable no-unused-vars */
-import { PaginationQuery, SearchQuery } from './query';
+import React from 'react';
 import { ReposList } from './repos-list';
 
 export interface ListProps {
   data: ReposList;
-  shouldResetPage: boolean;
-  onPaginationChange: (arg: PaginationQuery) => void;
+  page: number;
+  pageSize: number;
+  onPageChange: (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
+  onPageSizeChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 export interface SearchProps {
-  onSearchChange: (arg: SearchQuery) => void;
+  onSearchChange: (arg: React.ChangeEvent<HTMLInputElement>) => void;
 }

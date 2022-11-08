@@ -6,7 +6,8 @@ export const ListStyled = styled(List)`
 `;
 
 export const TableRowStyled = styled(TableRow)`
-  :last-child td, :last-child th: {
+  :last-child td,
+  :last-child th {
     border: 0;
   }
 `;

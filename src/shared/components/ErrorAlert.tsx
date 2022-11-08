@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Alert, Box } from '@mui/material';
-import { ErrorAlertProps } from '../models/ui';
+import { ErrorAlertProps } from '../models';
 
 export const ErrorAlert: FC<ErrorAlertProps> = ({ error }) => (
   <Box>

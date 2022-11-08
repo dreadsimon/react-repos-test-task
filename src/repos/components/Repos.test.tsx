@@ -4,9 +4,12 @@ import { MockedProvider } from '@apollo/client/testing';
 import { Repos } from './Repos';
 import {
   reposErrorMock,
+  reposPagedResMock,
   reposResEmptyMock,
-  reposResMock
+  reposResMock,
+  reposResTestMock
 } from '../../testing/repos-responses.mock';
+import userEvent from '@testing-library/user-event';
 
 test('User waits for data to be loaded', async () => {
   render(
@@ -34,8 +37,8 @@ test('User entering search phrase with search results (3)', async () => {
   );
   const rows = await screen.findAllByRole('row');
   const cells = await screen.findAllByRole('cell');
-  const table = await screen.findByRole('table');
-  expect(table).toBeInTheDocument();
+  const text = await screen.findByText(/test3/);
+  expect(text).toBeInTheDocument();
   expect(rows).toHaveLength(4);
   expect(cells).toHaveLength(9);
 });
@@ -63,35 +66,29 @@ test('User sees information when there is no search results', async () => {
   expect(message).toBeInTheDocument();
 });
 
-// TODO: write more testcases
-// test('User clearing search phrase', () => {
-//   render(
-//     <MockedProvider mocks={reposResEmptyMock}>
-//       <Repos />
-//     </MockedProvider>
-//   );
-// });
+test('User sees results when entering search phrase', async () => {
+  render(
+    <MockedProvider mocks={reposResTestMock}>
+      <Repos />
+    </MockedProvider>
+  );
 
-// test('User change pagination page', () => {
-//   render(
-//     <MockedProvider mocks={reposResEmptyMock}>
-//       <Repos />
-//     </MockedProvider>
-//   );
-// });
+  const input = await screen.findByLabelText(/search for/i);
+  await userEvent.clear(input);
+  await userEvent.type(input, 'test');
+  const text = await screen.findByText(/test_repo/i);
+  expect(text).toBeInTheDocument();
+});
 
-// test('User change pagination page with search phrase', () => {
-//   render(
-//     <MockedProvider mocks={reposResEmptyMock}>
-//       <Repos />
-//     </MockedProvider>
-//   );
-// });
+test('User change pagination page', async () => {
+  render(
+    <MockedProvider mocks={reposPagedResMock}>
+      <Repos />
+    </MockedProvider>
+  );
 
-// test('User change pagination size', () => {
-//   render(
-//     <MockedProvider mocks={reposResEmptyMock}>
-//       <Repos />
-//     </MockedProvider>
-//   );
-// });
+  const button = await screen.findByLabelText(/Go to next page/i);
+  await userEvent.click(button);
+  const text = await screen.findByText(/11–20 of 20/i);
+  expect(text).toBeInTheDocument();
+});

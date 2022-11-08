@@ -6,5 +6,5 @@ export const DEFAULT_GET_REPOSITORIES_VARIABLES = {
   before: null,
   after: null,
   last: 10,
-  search: `${PUBLIC_REPO_PREFIX} ${DEFAULT_SEARCH_QUERY}`
+  search: `${PUBLIC_REPO_PREFIX}${DEFAULT_SEARCH_QUERY}`
 };
